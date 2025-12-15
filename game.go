@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-	// Inisialisasi semua tipe data dasar
 	var namaPetualang string      // string
 	var nyawa int = 100           // int
 	var keberanian float64 = 50.0 // float64
@@ -16,24 +15,20 @@ func main() {
 	var simbolPedang rune = '⚔'   // rune
 	var lokasi complex64 = 0 + 0i // complex64 (koordinat hutan)
 
-	// Input nama pemain
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("Masukkan nama petualang: ")
 	namaPetualang, _ = reader.ReadString('\n')
 	namaPetualang = strings.TrimSpace(namaPetualang)
 
-	// Cerita pembuka
 	fmt.Printf("\n%s, kau berdiri di tepi Hutan Angker yang legendaris.\n", namaPetualang)
 	fmt.Printf("Koordinat masuk: (%.0f, %.0f)\n", real(lokasi), imag(lokasi))
 	fmt.Println("Dengar bisikan angin: \"Hanya yang berhati murni yang menemukan harta karun Naga Tua\"")
 
-	// Game loop - 3 area berbeda
 	for area := 1; area <= 3 && nyawa > 0; area++ {
 		fmt.Printf("\n===== AREA %d =====\n", area)
 		fmt.Printf("Status: Nyawa [%d] | Keberanian [%.0f%%] | Pedang: %c\n",
 			nyawa, keberanian, simbolPedang)
 
-		// Update lokasi kompleks (tanpa perhitungan matematika rumit)
 		switch area {
 		case 1:
 			lokasi = 3 + 4i
@@ -43,8 +38,7 @@ func main() {
 			lokasi = 5 - 3i
 		}
 		fmt.Printf("Koordinat saat ini: (%.0f, %.0f)\n", real(lokasi), imag(lokasi))
-
-		// Konten berbeda per area (switch-case)
+		
 		switch area {
 		case 1:
 			fmt.Println("\n.Seekor rubah terluka menghalangi jalan.")
@@ -109,8 +103,7 @@ func main() {
 			}
 		}
 	}
-
-	// Akhir game
+	
 	fmt.Println("\n===== PETUALANGAN BERAKHIR =====")
 	if nyawa <= 0 {
 		fmt.Printf("%s gugur di Hutan Angker...\n", namaPetualang)
@@ -124,10 +117,10 @@ func main() {
 	}
 }
 
-// Fungsi input aman
 func getInput() string {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("Pilihan (1/2): ")
 	input, _ := reader.ReadString('\n')
 	return strings.TrimSpace(input)
 }
+
