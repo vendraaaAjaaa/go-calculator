@@ -1,0 +1,107 @@
+program PacmanCLI
+
+kamus
+    maze : array[0..6, 0..9] of integer
+    playerRow, playerCol : integer
+    newRow, newCol : integer
+    score : integer
+    gameRunning : boolean
+    move : string
+
+algoritma
+    // 1. Inisialisasi Peta dan Variabel
+    // Maze: 1=dinding, 2=makanan, 0=jalan kosong
+    maze 🡨 [
+        [1,1,1,1,1,1,1,1,1,1],
+        [1,2,2,2,1,2,2,2,2,1],
+        [1,2,1,2,1,2,1,1,2,1],
+        [1,2,1,2,2,2,2,2,2,1],
+        [1,2,1,1,1,1,1,2,1,1],
+        [1,2,2,2,2,2,2,2,2,1],
+        [1,1,1,1,1,1,1,1,1,1]
+    ]
+    
+    playerRow 🡨 1
+    playerCol 🡨 1
+    score 🡨 0
+    gameRunning 🡨 true
+    
+    while gameRunning do
+        // Bersihkan layar terminal
+        clearScreen()
+        
+        // Tampilkan UI Game
+        output("=== PACMAN GO (CLI VERSION) ===")
+        output("Skor:", score)
+        output("Kontrol: w (atas), s (bawah), a (kiri), d (kanan), q (keluar)")
+        
+        // 2. Render Peta dengan Nested Loop
+        for r 🡨 0 to 6 do
+            for c 🡨 0 to 9 do
+                if r == playerRow AND c == playerCol then
+                    output("C ")  // Tampilkan Pacman
+                else if maze[r][c] == 1 then
+                    output("# ")  // Tampilkan dinding
+                else if maze[r][c] == 2 then
+                    output(". ")  // Tampilkan makanan
+                else
+                    output("  ")  // Tampilkan jalan kosong
+                endif
+            endfor
+            output newline
+        endfor
+        
+        // Ambil input gerakan dari user
+        output("Gerak: ")
+        input(move)
+        
+        // Simpan posisi baru berdasarkan input
+        newRow 🡨 playerRow
+        newCol 🡨 playerCol
+        
+        // 3. Logika Input Gerakan
+        if move == "w" then
+            newRow 🡨 newRow - 1
+        else if move == "s" then
+            newRow 🡨 newRow + 1
+        else if move == "a" then
+            newCol 🡨 newCol - 1
+        else if move == "d" then
+            newCol 🡨 newCol + 1
+        else if move == "q" then
+            clearScreen()
+            output("Game Berhenti. Skor Akhir:", score)
+            gameRunning 🡨 false
+            break
+        endif
+        
+        // 4. Cek Tabrakan Dinding
+        if maze[newRow][newCol] != 1 then
+            playerRow 🡨 newRow
+            playerCol 🡨 newCol
+        endif
+        
+        // 5. Cek Pengumpulan Makanan
+        if maze[playerRow][playerCol] == 2 then
+            score 🡨 score + 10
+            maze[playerRow][playerCol] 🡨 0  // Hapus makanan yang sudah dimakan
+        endif
+        
+        // Cek Kondisi Menang
+        if score == 280 then
+            clearScreen()
+            output("Selamat! Kamu Menang!")
+            gameRunning 🡨 false
+        endif
+    endwhile
+
+endprogram
+
+// Prosedur Pembantu
+procedure clearScreen()
+    if OS == "windows" then
+        exec("cmd /c cls")
+    else
+        exec("clear")
+    endif
+endprocedure
